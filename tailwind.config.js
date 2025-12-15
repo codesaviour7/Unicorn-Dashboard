@@ -27,6 +27,8 @@ export default {
         graycontent:"#838383",
         grayborder:"#E2E2E2",
         graybg:"#F5F5F5",
+        bluempty:"#8A82FB",
+        bluecard:"#4E46B41F"
       },
     },
   },

@@ -1,5 +1,8 @@
 import { defineStore } from 'pinia'
 import { unicornAPI } from '../services/api'
+import { dummyUnicorns } from '../data/unicorns'
+
+const USE_DUMMY_DATA = true
 
 export const useUnicornStore = defineStore('unicorn', {
   state: () => ({
@@ -38,6 +41,12 @@ export const useUnicornStore = defineStore('unicorn', {
 
   actions: {
     async fetchUnicorns() {
+      if (USE_DUMMY_DATA) {
+        this.unicorns = dummyUnicorns.map((u) => ({ ...u }))
+        this.error = null
+        return
+      }
+
       this.loading = true
       this.error = null
       try {
@@ -52,6 +61,15 @@ export const useUnicornStore = defineStore('unicorn', {
     },
 
     async createUnicorn(unicornData) {
+      if (USE_DUMMY_DATA) {
+        const newUnicorn = {
+          _id: Date.now().toString(),
+          ...unicornData,
+        }
+        this.unicorns.push(newUnicorn)
+        return
+      }
+
       this.loading = true
       this.error = null
       try {
@@ -66,6 +84,17 @@ export const useUnicornStore = defineStore('unicorn', {
     },
 
     async updateUnicorn(id, unicornData) {
+      if (USE_DUMMY_DATA) {
+        const index = this.unicorns.findIndex((u) => u._id === id)
+        if (index !== -1) {
+          this.unicorns[index] = {
+            ...this.unicorns[index],
+            ...unicornData,
+          }
+        }
+        return
+      }
+
       this.loading = true
       this.error = null
       try {
@@ -80,6 +109,11 @@ export const useUnicornStore = defineStore('unicorn', {
     },
 
     async deleteUnicorn(id) {
+      if (USE_DUMMY_DATA) {
+        this.unicorns = this.unicorns.filter((u) => u._id !== id)
+        return
+      }
+
       this.loading = true
       this.error = null
       try {

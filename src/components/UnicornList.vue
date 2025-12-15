@@ -25,128 +25,18 @@
     </div>
 
     <div v-else class="space-y-4">
-      <div class="hidden md:block bg-white rounded-lg shadow overflow-hidden">
-        <div class="flex">
-          <div class="w-1 flex-shrink-0 bg-transparent"></div>
-          <div class="flex-1 p-4 border-b border-gray-200">
-            <div class="grid grid-cols-12 gap-4 text-xs font-semibold text-graycontent uppercase tracking-wider">
-              <div class="col-span-1">No</div>
-              <div class="col-span-3">Name</div>
-              <div class="col-span-2">Age</div>
-              <div class="col-span-2">Color</div>
-              <div class="col-span-2">Status</div>
-              <div class="col-span-2"></div>
-            </div>
-          </div>
-        </div>
-      </div>
-
-      <div
+      <UnicornCard
         v-for="(unicorn, index) in paginatedUnicorns"
         :key="unicorn._id"
-        class="bg-white rounded-lg shadow overflow-hidden"
-      >
-        <div class="flex">
-          <div
-            :class="[
-              'w-1 flex-shrink-0',
-              getCardColor(index)
-            ]"
-          ></div>
-          <div class="flex-1 p-6">
-            <div class="grid grid-cols-1 md:grid-cols-12 gap-4 items-center">
-              <div class="col-span-1 text-sm font-medium text-gray-700">
-                <span class="md:hidden font-semibold text-gray-500 uppercase text-xs tracking-wider mr-2">No:</span>
-                {{ startIndex + index + 1 }}
-              </div>
-              <div class="col-span-1 md:col-span-3 text-sm font-medium text-gray-900">
-                <span class="md:hidden font-semibold text-gray-500 uppercase text-xs tracking-wider mr-2">Name:</span>
-                {{ unicorn.name }}
-              </div>
-              <div class="col-span-1 md:col-span-2 text-sm text-gray-700">
-                <span class="md:hidden font-semibold text-gray-500 uppercase text-xs tracking-wider mr-2">Age:</span>
-                {{ unicorn.age }}
-              </div>
-              <div class="col-span-1 md:col-span-2 flex items-center gap-2">
-                <span class="md:hidden font-semibold text-gray-500 uppercase text-xs tracking-wider mr-2">Color:</span>
-                <div
-                  class="w-5 h-5 rounded-full border border-gray-300"
-                  :style="{ backgroundColor: unicorn.color }"
-                ></div>
-                <span class="text-sm text-gray-700">{{ unicorn.color }}</span>
-              </div>
-              <div class="col-span-1 md:col-span-2">
-                <span class="md:hidden font-semibold text-gray-500 uppercase text-xs tracking-wider mr-2">Status:</span>
-                <span
-                  :class="[
-                    'inline-flex items-center gap-1 px-3 py-1 text-xs font-semibold rounded-full',
-                    getStatusClass(unicorn.age)
-                  ]"
-                >
-                  <span>{{ getStatusEmoji(unicorn.age) }}</span>
-                  {{ store.getStatusByAge(unicorn.age) }}
-                </span>
-              </div>
-              <div class="col-span-1 md:col-span-2 flex items-center gap-3 md:justify-end">
-                <button
-                  @click="$emit('edit', unicorn)"
-                  class="px-4 py-1.5 text-sm font-medium text-gray-700 bg-gray-100 rounded-lg hover:bg-gray-200 transition-colors"
-                >
-                  Edit
-                </button>
-                <button
-                  @click="$emit('delete', unicorn)"
-                  class="text-red-600 hover:text-red-700 transition-colors"
-                >
-                  <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 7l-.867 12.142A2 2 0 0116.138 21H7.862a2 2 0 01-1.995-1.858L5 7m5 4v6m4-6v6m1-10V4a1 1 0 00-1-1h-4a1 1 0 00-1 1v3M4 7h16" />
-                  </svg>
-                </button>
-              </div>
-            </div>
-
-            <div class="mt-4 pt-4 border-t border-gray-200">
-              <button
-                @click="toggleDetails(unicorn._id)"
-                class="flex items-center gap-2 text-sm text-gray-600 hover:text-gray-900 transition-colors"
-              >
-                <span>{{ expandedDetails.has(unicorn._id) ? 'Hide' : 'Show' }} details</span>
-                <svg
-                  :class="[
-                    'w-4 h-4 transition-transform',
-                    expandedDetails.has(unicorn._id) ? 'rotate-180' : ''
-                  ]"
-                  fill="none"
-                  stroke="currentColor"
-                  viewBox="0 0 24 24"
-                >
-                  <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 9l-7 7-7-7" />
-                </svg>
-              </button>
-              <div v-if="expandedDetails.has(unicorn._id)" class="mt-4 p-4 bg-gray-50 rounded-lg">
-                <div class="grid grid-cols-2 gap-4 text-sm">
-                  <div>
-                    <span class="text-gray-600">Name:</span>
-                    <span class="ml-2 font-medium text-gray-900">{{ unicorn.name }}</span>
-                  </div>
-                  <div>
-                    <span class="text-gray-600">Age:</span>
-                    <span class="ml-2 font-medium text-gray-900">{{ unicorn.age }}</span>
-                  </div>
-                  <div>
-                    <span class="text-gray-600">Color:</span>
-                    <span class="ml-2 font-medium text-gray-900">{{ unicorn.color }}</span>
-                  </div>
-                  <div>
-                    <span class="text-gray-600">Status:</span>
-                    <span class="ml-2 font-medium text-gray-900">{{ store.getStatusByAge(unicorn.age) }}</span>
-                  </div>
-                </div>
-              </div>
-            </div>
-          </div>
-        </div>
-      </div>
+        :unicorn="unicorn"
+        :no="startIndex + index + 1"
+        :color-class="getCardColor(index)"
+        :status-label="store.getStatusByAge(unicorn.age)"
+        :status-class="getStatusClass(unicorn.age)"
+        :status-emoji="getStatusEmoji(unicorn.age)"
+        @edit="$emit('edit', $event)"
+        @delete="$emit('delete', $event)"
+      />
     </div>
 
     <div v-if="totalPages > 1 && !store.loading" class="mt-8 flex justify-center items-center gap-2">
@@ -198,11 +88,11 @@
 <script setup>
 import { ref, computed, watch } from 'vue'
 import { useUnicornStore } from '../stores/unicorn'
+import UnicornCard from './UnicornCard.vue'
 
 const store = useUnicornStore()
 const currentPage = ref(1)
 const pageSize = 5
-const expandedDetails = ref(new Set())
 
 watch(() => store.sortField, () => {
   currentPage.value = 1
@@ -240,14 +130,6 @@ const visiblePages = computed(() => {
   }
   return pages
 })
-
-const toggleDetails = (id) => {
-  if (expandedDetails.value.has(id)) {
-    expandedDetails.value.delete(id)
-  } else {
-    expandedDetails.value.add(id)
-  }
-}
 
 const getCardColor = (index) => {
   const colors = [
