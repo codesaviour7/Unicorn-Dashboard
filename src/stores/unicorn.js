@@ -1,6 +1,7 @@
 import { defineStore } from 'pinia'
 import { unicornAPI } from '../services/api'
 import { dummyUnicorns } from '../data/unicorns'
+import { getStatusByAge } from '../utils/status'
 
 const USE_DUMMY_DATA = true
 
@@ -14,6 +15,10 @@ export const useUnicornStore = defineStore('unicorn', {
   }),
 
   getters: {
+    /**
+     * @param {Object} state - The store state
+     * @returns {Array} Sorted array of unicorns
+     */
     sortedUnicorns(state) {
       if (!state.sortField) return state.unicorns
 
@@ -32,14 +37,19 @@ export const useUnicornStore = defineStore('unicorn', {
       })
     },
 
+    /**
+     * @returns {Function} Function that takes age and returns status label
+     */
     getStatusByAge: () => (age) => {
-      if (age >= 0 && age <= 8) return 'Baby Unicorn'
-      if (age >= 9 && age <= 25) return 'Mature Unicorn'
-      return 'Old Unicorn'
+      return getStatusByAge(age).label
     },
   },
 
   actions: {
+    /**
+     * Fetches all unicorns from the API
+     * @returns {Promise<void>}
+     */
     async fetchUnicorns() {
       if (USE_DUMMY_DATA) {
         this.unicorns = dummyUnicorns.map((u) => ({ ...u }))
@@ -60,13 +70,22 @@ export const useUnicornStore = defineStore('unicorn', {
       }
     },
 
+    /**
+     * Creates a new unicorn
+     * @param {Object} unicornData - The unicorn data to create
+     * @returns {Promise<void>}
+     * @throws {Error} If creation fails
+     */
     async createUnicorn(unicornData) {
       if (USE_DUMMY_DATA) {
+        this.loading = true
+        await new Promise(resolve => setTimeout(resolve, 300))
         const newUnicorn = {
           _id: Date.now().toString(),
           ...unicornData,
         }
         this.unicorns.push(newUnicorn)
+        this.loading = false
         return
       }
 
@@ -83,8 +102,17 @@ export const useUnicornStore = defineStore('unicorn', {
       }
     },
 
+    /**
+     * Updates an existing unicorn
+     * @param {string} id - The unicorn ID
+     * @param {Object} unicornData - The updated unicorn data
+     * @returns {Promise<void>}
+     * @throws {Error} If update fails
+     */
     async updateUnicorn(id, unicornData) {
       if (USE_DUMMY_DATA) {
+        this.loading = true
+        await new Promise(resolve => setTimeout(resolve, 300))
         const index = this.unicorns.findIndex((u) => u._id === id)
         if (index !== -1) {
           this.unicorns[index] = {
@@ -92,6 +120,7 @@ export const useUnicornStore = defineStore('unicorn', {
             ...unicornData,
           }
         }
+        this.loading = false
         return
       }
 
@@ -108,9 +137,18 @@ export const useUnicornStore = defineStore('unicorn', {
       }
     },
 
+    /**
+     * Deletes a unicorn by ID
+     * @param {string} id - The unicorn ID to delete
+     * @returns {Promise<void>}
+     * @throws {Error} If deletion fails
+     */
     async deleteUnicorn(id) {
       if (USE_DUMMY_DATA) {
+        this.loading = true
+        await new Promise(resolve => setTimeout(resolve, 300))
         this.unicorns = this.unicorns.filter((u) => u._id !== id)
+        this.loading = false
         return
       }
 
@@ -127,6 +165,10 @@ export const useUnicornStore = defineStore('unicorn', {
       }
     },
 
+    /**
+     * Sets the sort field and direction
+     * @param {string} field - The field to sort by ('name' or 'age')
+     */
     setSort(field) {
       if (this.sortField === field) {
         this.sortDirection = this.sortDirection === 'asc' ? 'desc' : 'asc'
@@ -136,6 +178,9 @@ export const useUnicornStore = defineStore('unicorn', {
       }
     },
 
+    /**
+     * Clears the current sort settings
+     */
     clearSort() {
       this.sortField = null
       this.sortDirection = 'asc'

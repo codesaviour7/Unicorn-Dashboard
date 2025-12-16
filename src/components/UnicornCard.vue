@@ -61,6 +61,7 @@
               type="button"
               @click="$emit('edit', unicorn)"
               class="px-4 py-1.5 rounded-[10px] border border-grayborder bg-white text-md md:text-sm font-bold text-graydata hover:bg-graybg transition-colors"
+              aria-label="Edit unicorn"
             >
               Edit
             </button>
@@ -68,6 +69,7 @@
               type="button"
               @click="$emit('delete', unicorn)"
               class="inline-flex items-center justify-center px-3 py-1.5 rounded-[10px] bg-del text-white hover:bg-red-600 transition-colors"
+              aria-label="Delete unicorn"
             >
               <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                 <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 7l-.867 12.142A2 2 0 0116.138 21H7.862a2 2 0 01-1.995-1.858L5 7m5 4v6m4-6v6m1-10V4a1 1 0 00-1-1h-4a1 1 0 00-1 1v3M4 7h16" />
@@ -81,6 +83,8 @@
             type="button"
             @click="toggleDetails"
             class="inline-flex items-center gap-2 text-md md:text-sm text-graycontent hover:text-graydata transition-colors"
+            :aria-expanded="isExpanded"
+            aria-label="Toggle details"
           >
             <span>{{ isExpanded ? 'Hide details' : 'Show details' }}</span>
             <span class="w-6 h-6 flex items-center justify-center rounded-full border border-grayborder bg-white">
@@ -123,14 +127,20 @@
 <script setup>
 import { ref } from 'vue'
 
+
 const props = defineProps({
   unicorn: {
     type: Object,
     required: true,
+    validator: (value) => {
+      return value && typeof value === 'object' && 
+             'name' in value && 'age' in value && 'color' in value
+    },
   },
   no: {
     type: Number,
     required: true,
+    validator: (value) => value > 0,
   },
   colorClass: {
     type: String,

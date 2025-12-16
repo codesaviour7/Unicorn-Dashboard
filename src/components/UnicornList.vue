@@ -31,9 +31,9 @@
         :unicorn="unicorn"
         :no="startIndex + index + 1"
         :color-class="getCardColor(index)"
-        :status-label="store.getStatusByAge(unicorn.age)"
-        :status-class="getStatusClass(unicorn.age)"
-        :status-emoji="getStatusEmoji(unicorn.age)"
+        :status-label="getStatusInfo(unicorn.age).label"
+        :status-class="getStatusInfo(unicorn.age).class"
+        :status-emoji="getStatusInfo(unicorn.age).emoji"
         @edit="$emit('edit', $event)"
         @delete="$emit('delete', $event)"
       />
@@ -49,6 +49,7 @@
             ? 'text-gray-300 cursor-not-allowed'
             : 'text-gray-600 hover:bg-gray-100'
         ]"
+        aria-label="Previous page"
       >
         <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
           <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15 19l-7-7 7-7" />
@@ -64,6 +65,8 @@
             ? 'bg-picolo text-white'
             : 'text-gray-700 hover:bg-gray-100'
         ]"
+        :aria-label="`Go to page ${page}`"
+        :aria-current="currentPage === page ? 'page' : undefined"
       >
         {{ page }}
       </button>
@@ -76,6 +79,7 @@
             ? 'text-gray-300 cursor-not-allowed'
             : 'text-gray-600 hover:bg-gray-100'
         ]"
+        aria-label="Next page"
       >
         <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
           <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 5l7 7-7 7" />
@@ -89,10 +93,12 @@
 import { ref, computed, watch } from 'vue'
 import { useUnicornStore } from '../stores/unicorn'
 import UnicornCard from './UnicornCard.vue'
+import { PAGINATION, CARD_COLORS } from '../constants'
+import { getStatusByAge } from '../utils/status'
 
 const store = useUnicornStore()
 const currentPage = ref(1)
-const pageSize = 5
+const pageSize = PAGINATION.PAGE_SIZE
 
 watch(() => store.sortField, () => {
   currentPage.value = 1
@@ -117,7 +123,7 @@ const startIndex = computed(() => (currentPage.value - 1) * pageSize)
 
 const visiblePages = computed(() => {
   const pages = []
-  const maxVisible = 7
+  const maxVisible = PAGINATION.MAX_VISIBLE_PAGES
   let start = Math.max(1, currentPage.value - Math.floor(maxVisible / 2))
   let end = Math.min(totalPages.value, start + maxVisible - 1)
   
@@ -132,23 +138,10 @@ const visiblePages = computed(() => {
 })
 
 const getCardColor = (index) => {
-  const colors = [
-    'bg-red-500',
-    'bg-green-500',
-    'bg-blue-500',
-  ]
-  return colors[index % colors.length]
+  return CARD_COLORS[index % CARD_COLORS.length]
 }
 
-const getStatusClass = (age) => {
-  if (age >= 0 && age <= 8) return 'bg-yellow-100 text-yellow-800'
-  if (age >= 9 && age <= 25) return 'bg-green-100 text-green-800'
-  return 'bg-purple-100 text-purple-800'
-}
-
-const getStatusEmoji = (age) => {
-  if (age >= 0 && age <= 8) return '👶'
-  if (age >= 9 && age <= 25) return '🦄'
-  return '👴'
+const getStatusInfo = (age) => {
+  return getStatusByAge(age)
 }
 </script>

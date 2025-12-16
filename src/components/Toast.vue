@@ -10,6 +10,8 @@
     <div
       v-if="visible"
       class="fixed bottom-4 right-4 bg-red-600 text-white rounded-lg shadow-lg p-4 min-w-[300px] max-w-md z-50"
+      role="alert"
+      aria-live="polite"
     >
       <div class="flex items-start gap-3">
         <div class="flex-shrink-0">
@@ -26,6 +28,7 @@
         <button
           @click="dismiss"
           class="flex-shrink-0 text-white hover:text-red-200 transition-colors"
+          aria-label="Dismiss notification"
         >
           <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
             <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M6 18L18 6M6 6l12 12" />
@@ -37,16 +40,20 @@
 </template>
 
 <script setup>
-import { ref, onMounted, watch } from 'vue'
+import { ref, onMounted, watch, onBeforeUnmount } from 'vue'
+import { TOAST } from '../constants'
+
 
 const props = defineProps({
   unicornName: {
     type: String,
     required: true,
+    validator: (value) => value && value.trim().length > 0,
   },
   duration: {
     type: Number,
-    default: 5000,
+    default: TOAST.DEFAULT_DURATION,
+    validator: (value) => value >= 0,
   },
 })
 
@@ -55,6 +62,7 @@ const emit = defineEmits(['close'])
 const visible = ref(false)
 let timeoutId = null
 
+// showing toast
 onMounted(() => {
   visible.value = true
   if (props.duration > 0) {
@@ -64,10 +72,19 @@ onMounted(() => {
   }
 })
 
+
+onBeforeUnmount(() => {
+  if (timeoutId) {
+    clearTimeout(timeoutId)
+  }
+})
+
+
 const dismiss = () => {
   visible.value = false
   if (timeoutId) {
     clearTimeout(timeoutId)
+    timeoutId = null
   }
   setTimeout(() => {
     emit('close')
