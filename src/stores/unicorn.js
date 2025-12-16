@@ -1,9 +1,6 @@
 import { defineStore } from 'pinia'
 import { unicornAPI } from '../services/api'
-import { dummyUnicorns } from '../data/unicorns'
 import { getStatusByAge } from '../utils/status'
-
-const USE_DUMMY_DATA = true
 
 export const useUnicornStore = defineStore('unicorn', {
   state: () => ({
@@ -51,12 +48,6 @@ export const useUnicornStore = defineStore('unicorn', {
      * @returns {Promise<void>}
      */
     async fetchUnicorns() {
-      if (USE_DUMMY_DATA) {
-        this.unicorns = dummyUnicorns.map((u) => ({ ...u }))
-        this.error = null
-        return
-      }
-
       this.loading = true
       this.error = null
       try {
@@ -77,18 +68,6 @@ export const useUnicornStore = defineStore('unicorn', {
      * @throws {Error} If creation fails
      */
     async createUnicorn(unicornData) {
-      if (USE_DUMMY_DATA) {
-        this.loading = true
-        await new Promise(resolve => setTimeout(resolve, 300))
-        const newUnicorn = {
-          _id: Date.now().toString(),
-          ...unicornData,
-        }
-        this.unicorns.push(newUnicorn)
-        this.loading = false
-        return
-      }
-
       this.loading = true
       this.error = null
       try {
@@ -110,20 +89,6 @@ export const useUnicornStore = defineStore('unicorn', {
      * @throws {Error} If update fails
      */
     async updateUnicorn(id, unicornData) {
-      if (USE_DUMMY_DATA) {
-        this.loading = true
-        await new Promise(resolve => setTimeout(resolve, 300))
-        const index = this.unicorns.findIndex((u) => u._id === id)
-        if (index !== -1) {
-          this.unicorns[index] = {
-            ...this.unicorns[index],
-            ...unicornData,
-          }
-        }
-        this.loading = false
-        return
-      }
-
       this.loading = true
       this.error = null
       try {
@@ -144,14 +109,6 @@ export const useUnicornStore = defineStore('unicorn', {
      * @throws {Error} If deletion fails
      */
     async deleteUnicorn(id) {
-      if (USE_DUMMY_DATA) {
-        this.loading = true
-        await new Promise(resolve => setTimeout(resolve, 300))
-        this.unicorns = this.unicorns.filter((u) => u._id !== id)
-        this.loading = false
-        return
-      }
-
       this.loading = true
       this.error = null
       try {
