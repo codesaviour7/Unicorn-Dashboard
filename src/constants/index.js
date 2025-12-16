@@ -35,7 +35,9 @@ export const CARD_COLORS = [
 
 export const VALIDATION = {
   MIN_NAME_LENGTH: 2,
+  MAX_NAME_LENGTH: 30,
   MIN_AGE: 0,
+  MAX_AGE: 250,
 }
 
 export const TOAST = {

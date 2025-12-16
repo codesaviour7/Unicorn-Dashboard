@@ -30,6 +30,7 @@
               v-model="formData.name"
               type="text"
               required
+              :maxlength="VALIDATION.MAX_NAME_LENGTH"
               placeholder="Write Name"
               class="w-full px-4 py-2.5 border border-gray-300 rounded-lg focus:ring-2 focus:ring-purple-500 focus:border-transparent"
               :class="{ 'border-red-500': errors.name }"
@@ -154,6 +155,9 @@ const validate = () => {
   } else if (formData.name.trim().length < VALIDATION.MIN_NAME_LENGTH) {
     errors.name = `Name must be at least ${VALIDATION.MIN_NAME_LENGTH} characters`
     isValid = false
+  } else if (formData.name.trim().length > VALIDATION.MAX_NAME_LENGTH) {
+    errors.name = `Name must be no more than ${VALIDATION.MAX_NAME_LENGTH} characters`
+    isValid = false
   }
 
   const ageNum = Number(formData.age)
@@ -165,6 +169,9 @@ const validate = () => {
     isValid = false
   } else if (ageNum < VALIDATION.MIN_AGE) {
     errors.age = `Age must be ${VALIDATION.MIN_AGE} or greater`
+    isValid = false
+  } else if (ageNum > VALIDATION.MAX_AGE) {
+    errors.age = `Age must be no more than ${VALIDATION.MAX_AGE} years`
     isValid = false
   } else if (!Number.isInteger(ageNum)) {
     errors.age = 'Age must be a whole number'
