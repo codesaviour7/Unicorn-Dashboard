@@ -12,7 +12,18 @@
 
         <main class="p-4 md:p-8">
           <div class="mb-6 md:mb-8 flex flex-col sm:flex-row justify-between items-start sm:items-center gap-4">
-            <h2 class="text-2xl md:text-3xl font-bold text-grayhead">Welcome John Doe</h2>
+            <div class="flex justify-between w-full md:w-auto">
+              <h2 class="text-2xl md:text-3xl font-bold text-grayhead">Welcome John Doe</h2>
+              <button
+                @click="mobileMenuOpen = true"
+                class="md:hidden p-2 text-gray-600 hover:text-gray-900 hover:bg-gray-100 rounded-lg transition-colors"
+                aria-label="Open menu"
+              >
+                <svg class="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                  <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 6h16M4 12h16M4 18h16" />
+                </svg>
+              </button>
+            </div>
             <button
               @click="showCreateForm = true"
               class="px-6 py-2.5 bg-picolo text-white rounded-lg hover:bg-purple-700 transition-colors font-medium flex items-center gap-2 w-full sm:w-auto justify-center"

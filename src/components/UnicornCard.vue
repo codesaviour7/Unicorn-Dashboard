@@ -21,9 +21,11 @@
                 <span>{{ no }}</span>
               </div>
 
-              <div class="col-span-1 md:col-span-3 text-md md:text-sm font-bold text-graydata flex items-center gap-1">
-                <span class="md:hidden text-sm font-normal text-graydata uppercase tracking-[0.08em]">Doctor Name</span>
-                <span>{{ unicorn.name }}</span>
+              <div class="col-span-1 md:col-span-3 text-md md:text-sm font-bold text-graydata min-w-0">
+                <div class="flex items-start gap-1 min-w-0">
+                  <span class="md:hidden text-sm font-normal text-graydata uppercase tracking-[0.08em] flex-shrink-0">Doctor Name</span>
+                  <span class="break-all min-w-0 flex-1">{{ unicorn.name }}</span>
+                </div>
               </div>
 
               <div class="col-span-1 md:col-span-2 font-bold text-md md:text-sm text-graydata flex items-center gap-1">
