@@ -8,12 +8,11 @@
   >
     <div class="bg-white rounded-lg shadow-xl max-w-md w-full max-h-[90vh] overflow-y-auto">
       <div :class="[
-        'text-white px-6 py-4 rounded-t-lg',
-        unicorn ? 'bg-gray-800' : 'bg-blue-800'
+        'text-black px-6 py-4 rounded-t-lg border-b-[1px] border-grayborder'
       ]">
         <h2 
           :id="unicorn ? 'edit-unicorn-title' : 'create-unicorn-title'"
-          class="text-xl font-semibold"
+          class="text-xl font-sans font-bold"
         >
           {{ unicorn ? 'Edit Unicorn details' : 'Create Unicorn' }}
         </h2>
@@ -22,7 +21,7 @@
       <form @submit.prevent="handleSubmit" class="p-6">
         <div class="space-y-6">
           <div>
-            <label for="name" class="block text-sm font-medium text-gray-700 mb-2">
+            <label for="name" class="block text-md font-sans font-normal text-black mb-2">
               Name
             </label>
             <input
@@ -32,17 +31,17 @@
               required
               :maxlength="VALIDATION.MAX_NAME_LENGTH"
               placeholder="Write Name"
-              class="w-full px-4 py-2.5 border border-gray-300 rounded-lg focus:ring-2 focus:ring-purple-500 focus:border-transparent"
+              class="w-full px-4 py-2.5 border border-gray-300 rounded-lg focus:ring-2 focus:ring-purple-500 focus:border-transparent placeholder:text-sm placeholder:font-sans"
               :class="{ 'border-red-500': errors.name }"
               :aria-invalid="!!errors.name"
               aria-describedby="name-error name-hint"
             />
-            <p v-if="errors.name" id="name-error" class="mt-1 text-sm text-red-600" role="alert">{{ errors.name }}</p>
-            <p v-else-if="!unicorn" id="name-hint" class="mt-1 text-sm text-gray-500">This is the unicorn name</p>
+            <p v-if="errors.name" id="name-error" class="mt-1 text-sm font-sans text-red-600" role="alert">{{ errors.name }}</p>
+            <p v-else-if="!unicorn" id="name-hint" class="mt-1 text-xs font-sans text-gray-500">This is the unicorn name</p>
           </div>
 
           <div>
-            <label for="age" class="block text-sm font-medium text-gray-700 mb-2">
+            <label for="age" class="block text-md font-sans font-normal text-black mb-2">
               Age
             </label>
             <input
@@ -52,16 +51,16 @@
               :min="VALIDATION.MIN_AGE"
               required
               placeholder="Write age"
-              class="w-full px-4 py-2.5 border border-gray-300 rounded-lg focus:ring-2 focus:ring-purple-500 focus:border-transparent"
+              class="w-full px-4 py-2.5 border border-gray-300 rounded-lg focus:ring-2 focus:ring-purple-500 focus:border-transparent placeholder:text-sm placeholder:font-sans"
               :class="{ 'border-red-500': errors.age }"
               :aria-invalid="!!errors.age"
               aria-describedby="age-error"
             />
-            <p v-if="errors.age" id="age-error" class="mt-1 text-sm text-red-600" role="alert">{{ errors.age }}</p>
+            <p v-if="errors.age" id="age-error" class="mt-1 text-sm font-sans text-red-600" role="alert">{{ errors.age }}</p>
           </div>
 
           <div>
-            <label for="color" class="block text-sm font-medium text-gray-700 mb-2">
+            <label for="color" class="block text-md font-sans font-normal text-black mb-2">
               Color
             </label>
             <input
@@ -70,12 +69,12 @@
               type="text"
               required
               placeholder="Write color"
-              class="w-full px-4 py-2.5 border border-gray-300 rounded-lg focus:ring-2 focus:ring-purple-500 focus:border-transparent"
+              class="w-full px-4 py-2.5 border border-gray-300 rounded-lg focus:ring-2 focus:ring-purple-500 focus:border-transparent placeholder:text-sm placeholder:font-sans"
               :class="{ 'border-red-500': errors.color }"
               :aria-invalid="!!errors.color"
               aria-describedby="color-error"
             />
-            <p v-if="errors.color" id="color-error" class="mt-1 text-sm text-red-600" role="alert">{{ errors.color }}</p>
+            <p v-if="errors.color" id="color-error" class="mt-1 text-sm font-sans text-red-600" role="alert">{{ errors.color }}</p>
           </div>
         </div>
 
