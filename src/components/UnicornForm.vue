@@ -68,6 +68,7 @@
               v-model="formData.color"
               type="text"
               required
+              :maxlength="VALIDATION.MAX_COLOR_LENGTH"
               placeholder="Write color"
               class="w-full px-4 py-2.5 border border-gray-300 rounded-lg focus:ring-2 focus:ring-purple-500 focus:border-transparent placeholder:text-sm placeholder:font-sans"
               :class="{ 'border-red-500': errors.color }"
@@ -179,6 +180,9 @@ const validate = () => {
 
   if (!formData.color || formData.color.trim().length === 0) {
     errors.color = 'Color is required'
+    isValid = false
+  } else if (formData.color.trim().length > VALIDATION.MAX_COLOR_LENGTH) {
+    errors.color = `Color must be no more than ${VALIDATION.MAX_COLOR_LENGTH} characters`
     isValid = false
   }
 
