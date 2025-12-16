@@ -33,13 +33,15 @@
                 <span>{{ unicorn.age }}</span>
               </div>
 
-              <div class="col-span-1 md:col-span-2 font-bold flex items-center gap-2 text-md md:text-sm text-graydata">
-                <span class="md:hidden text-sm font-normal text-graydata uppercase tracking-[0.08em]">Color</span>
-                <div
-                  class="w-5 h-5 rounded-full border border-grayborder"
-                  :style="{ backgroundColor: unicorn.color }"
-                ></div>
-                <span>{{ unicorn.color }}</span>
+              <div class="col-span-1 md:col-span-2 font-bold text-md md:text-sm text-graydata min-w-0">
+                <div class="flex items-start gap-2 min-w-0">
+                  <span class="md:hidden text-sm font-normal text-graydata uppercase tracking-[0.08em] flex-shrink-0">Color</span>
+                  <div
+                    class="w-5 h-5 rounded-full border border-grayborder flex-shrink-0"
+                    :style="{ backgroundColor: unicorn.color }"
+                  ></div>
+                  <span class="break-all min-w-0 flex-1">{{ unicorn.color }}</span>
+                </div>
               </div>
 
               <div class="col-span-1 md:col-span-4 flex font-bold items-center gap-2 text-md md:text-sm">
